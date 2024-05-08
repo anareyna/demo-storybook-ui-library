@@ -1,0 +1,29 @@
+name: Build and deploy app
+on: [push]
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: actions/setup-node@v4
+              with:
+                  cache: "yarn"
+
+            - name: Run install
+              uses: borales/actions-yarn@v4
+              with:
+                  cmd: install
+
+            - name: Build
+              run: yarn build-storybook
+
+            - name: Deploy
+              uses: kevinpainchaud/simple-ftp-deploy-action@v1.2.0
+              with:
+                  ftp_host: ${{ secrets.FTP_HOST }}
+                  ftp_username: ${{ secrets.FTP_USERNAME }}
+                  ftp_password: ${{ secrets.FTP_PASSWORD }}
+                  local_source_dir: "dist"
+                  dist_target_dir: "labs.anareyna.com/storybook-simple-ui"
+                  delete: "false"
