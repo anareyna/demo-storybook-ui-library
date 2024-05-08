@@ -15,7 +15,7 @@ jobs:
               with:
                   cmd: install
 
-            - name: Build
+            - name: Build Storybook
               run: yarn build-storybook
 
             - name: Deploy
